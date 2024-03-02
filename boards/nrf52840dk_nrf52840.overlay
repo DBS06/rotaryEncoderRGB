@@ -1,0 +1,44 @@
+/{
+	pwmleds {
+		compatible = "pwm-leds";
+		rot_led_r: rot_led_r {
+			status = "okay";
+			pwms = <&sw_pwm 0 PWM_MSEC(20) PWM_POLARITY_INVERTED>;
+		};
+		rot_led_g: rot_led_pwm_g {
+			status = "okay";
+			pwms = <&sw_pwm 1 PWM_MSEC(20) PWM_POLARITY_INVERTED>;
+		};
+		rot_led_b: rot_led_pwm_b {
+			status = "okay";
+			pwms = <&sw_pwm 2 PWM_MSEC(20) PWM_POLARITY_INVERTED>;
+		};
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		rot_btn: rot_btn {
+			gpios = <&gpio0 04 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			label = "Push button on rotary encoder";
+			zephyr,code = <INPUT_KEY_0>;
+		};
+	};
+
+	aliases {
+		rot-led-red = &rot_led_r;
+		rot-led-green = &rot_led_g;
+		rot-led-blue = &rot_led_b;
+		rot-btn = &rot_btn;
+	};
+};
+
+&pwm0 {
+	status = "disabled";
+};
+
+&sw_pwm {
+	status = "okay";
+	channel-gpios = <&gpio0 29 PWM_POLARITY_INVERTED>,
+	                <&gpio0 28 PWM_POLARITY_INVERTED>,
+	                <&gpio0 03 PWM_POLARITY_INVERTED>;
+};
